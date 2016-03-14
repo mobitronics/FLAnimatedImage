@@ -19,6 +19,10 @@
 @end
 #endif
 
+@protocol FLAnimatedImageViewDelegate <NSObject>
+@optional
+- (void)didImageAnimationComplete:(FLAnimatedImageView *)animatedImageView;
+@end
 
 @interface FLAnimatedImageView ()
 
@@ -32,6 +36,8 @@
 
 @property (nonatomic, assign) BOOL shouldAnimate; // Before checking this value, call `-updateShouldAnimate` whenever the animated image or visibility (window, superview, hidden, alpha) has changed.
 @property (nonatomic, assign) BOOL needsDisplayWhenImageBecomesAvailable;
+
+@property (nonatomic, weak) id<FLAnimatedImageViewDelegate> imageViewdelegate;
 
 #if defined(DEBUG) && DEBUG
 @property (nonatomic, weak) id<FLAnimatedImageViewDebugDelegate> debug_delegate;
@@ -389,6 +395,11 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
                 self.accumulator -= delayTime;
                 self.currentFrameIndex++;
                 if (self.currentFrameIndex >= self.animatedImage.frameCount) {
+                  
+                  //Delegate set when image frame animation complete
+                  if ([self.imageViewdelegate respondsToSelector:@selector(didImageAnimationComplete:)]) {
+                    [self.imageViewdelegate didImageAnimationComplete:self];
+                  }
                     // If we've looped the number of times that this animated image describes, stop looping.
                     self.loopCountdown--;
                     if (self.loopCompletionBlock) {
