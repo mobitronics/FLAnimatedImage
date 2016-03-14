@@ -37,8 +37,6 @@
 @property (nonatomic, assign) BOOL shouldAnimate; // Before checking this value, call `-updateShouldAnimate` whenever the animated image or visibility (window, superview, hidden, alpha) has changed.
 @property (nonatomic, assign) BOOL needsDisplayWhenImageBecomesAvailable;
 
-@property (nonatomic, weak) id<FLAnimatedImageViewDelegate> imageViewdelegate;
-
 #if defined(DEBUG) && DEBUG
 @property (nonatomic, weak) id<FLAnimatedImageViewDebugDelegate> debug_delegate;
 #endif
